@@ -6,6 +6,7 @@ import React from 'react'
 import { MdArrowBack } from 'react-icons/md'
 import Heading from './Heading'
 import Button from './Button'
+import ItemContent from './ItemContent'
 
 function CartClient() {
     const { cartProducts } = useCart()
@@ -34,7 +35,7 @@ function CartClient() {
             <div className='justify-self-end'>TOTAL</div>
         </div>
         { cartProducts && cartProducts.map((item) => (
-            <div key={item.id}>{item.name}</div>
+            <ItemContent key={item.id} item={item}/>
         ))}
         <div className='border-t-[1.5px] border-slate-200 py-4 flex justify-between gap-4'>
             <div className='w-[90px]'>

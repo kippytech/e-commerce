@@ -112,7 +112,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
             <div className={product.inStock ? 'text-teal-400' : 'text-red-400'}>{ product.inStock ? 'In stock' : 'Out of stock' }
             </div>
             <Horizontal />
-            { isProductInCart ? 
+            { isProductInCart ? (
             <>
               <p className="mb-2 text-slate-500 flex items-center gap-1">
                 <MdCheckCircle size={20} className='text-teal-400' />
@@ -121,7 +121,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
               <div className="max-w-[300px]">
                 <Button label="view cart" outline onClick={() => { router.push('/cart') }} />
               </div>
-            </> : 
+            </> ) : (
             <>
             <SetColor 
               cartProduct={cartProduct}
@@ -142,7 +142,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
                  />
             </div>
             </>
-             }
+             )}
         </div>
 
     </div>

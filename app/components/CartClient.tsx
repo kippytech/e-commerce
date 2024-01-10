@@ -7,9 +7,10 @@ import { MdArrowBack } from 'react-icons/md'
 import Heading from './Heading'
 import Button from './Button'
 import ItemContent from './ItemContent'
+import { formattedPrice } from '@/utils/formatPrice'
 
 function CartClient() {
-    const { cartProducts, handleClearCart } = useCart()
+    const { cartProducts, handleClearCart, cartTotalAmount } = useCart()
 
     if (!cartProducts || cartProducts.length === 0) {
         return (
@@ -24,6 +25,7 @@ function CartClient() {
             </div>
         )
     }
+    console.log('buana vipi')
 
     return (
       <div>
@@ -45,7 +47,7 @@ function CartClient() {
                 
                     <div className='flex justify-between w-full font-semibold text-base'>
                       <span className=''>Subtotal</span>
-                      <span className=''>30000KES</span>
+                      <span className=''>{formattedPrice(cartTotalAmount)}</span>
                     </div>
                     <p className='text-slate-500'>Taxes and shipping calculated at checkout</p>
                     <Button label='Checkout' onClick={() => {}} />

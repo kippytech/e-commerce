@@ -1,14 +1,15 @@
 import Container from "@/app/components/Container"
 import ListRating from "@/app/components/ListRating"
 import ProductDetails from "@/app/components/ProductDetails"
-import { product } from "@/utils/product"
+import { products } from "@/utils/products"
+//import { product } from "@/utils/product"
 
 type Params = {
     productId?: string
 }
 
 function Product({ params } : { params: Params }) {
-   
+   const product = products.find((item) => item.id === params.productId)
   return (
     <div className="p-8">
         <Container>

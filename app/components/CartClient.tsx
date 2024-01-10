@@ -9,7 +9,7 @@ import Button from './Button'
 import ItemContent from './ItemContent'
 
 function CartClient() {
-    const { cartProducts } = useCart()
+    const { cartProducts, handleClearCart } = useCart()
 
     if (!cartProducts || cartProducts.length === 0) {
         return (
@@ -27,7 +27,7 @@ function CartClient() {
 
     return (
       <div>
-        <Heading title='Shoping Cart' center />
+        <Heading title='Shopping Cart' center />
         <div className='grid grid-cols-5 text-xs gap-4 pb-2 items-center mt-8'>
             <div className='col-span-2 justify-self-start'>PRODUCT</div>
             <div className='justify-self-center'>PRICE</div>
@@ -39,7 +39,7 @@ function CartClient() {
         ))}
         <div className='border-t-[1.5px] border-slate-200 py-4 flex justify-between gap-4'>
             <div className='w-[90px]'>
-                <Button label='Clear Cart' onClick={() => {}} small outline/>
+                <Button label='Clear Cart' onClick={() => {handleClearCart}} small outline/>
             </div>
             <div className='text-sm flex flex-col gap-1 items-start'>
                 

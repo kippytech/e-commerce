@@ -1,11 +1,14 @@
 'use client'
 
 import { Rating } from "@mui/material"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import SetColor from "./products/SetColor"
 import SetQuantity from "./products/SetQuantity"
 import Button from "./Button"
 import ProductImage from "./products/ProductImage"
+import { useCart } from "@/hooks/useCart"
+import { MdCheckCircle } from "react-icons/md"
+import { useRouter } from "next/navigation"
 
 type ProductDetailsProps = {
     product: any
@@ -34,6 +37,9 @@ const Horizontal = () => {
 
 function ProductDetails({ product }: ProductDetailsProps) {
 
+    const { handleAddProductToCart, cartProducts } = useCart()
+    const [isProductInCart, setIsProductInCart] = useState(false)
+
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id: product.id,
         name: product.name,
@@ -45,9 +51,23 @@ function ProductDetails({ product }: ProductDetailsProps) {
         price: product.price
     })
 
+    const router = useRouter()
+
     const productRating = product.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) / product.reviews.length
 
     console.log(cartProduct)
+
+    useEffect(() => {
+        setIsProductInCart(false)
+        if (cartProducts) {
+            const existingIndex = cartProducts.findIndex((item) => item.id === product.id)
+
+            if (existingIndex > -1) {
+                setIsProductInCart(true)
+            }
+        }
+    }, [cartProducts])
+
     const  handleColorSelect = useCallback((value: SelectedImgType) => {
         setCartProduct((prev) => {
             return {...prev, selectedImg: value}
@@ -92,6 +112,17 @@ function ProductDetails({ product }: ProductDetailsProps) {
             <div className={product.inStock ? 'text-teal-400' : 'text-red-400'}>{ product.inStock ? 'In stock' : 'Out of stock' }
             </div>
             <Horizontal />
+            { isProductInCart ? 
+            <>
+              <p className="mb-2 text-slate-500 flex items-center gap-1">
+                <MdCheckCircle size={20} className='text-teal-400' />
+                <span>Product added to cart</span>
+              </p>
+              <div className="max-w-[300px]">
+                <Button label="view cart" outline onClick={() => { router.push('/cart') }} />
+              </div>
+            </> : 
+            <>
             <SetColor 
               cartProduct={cartProduct}
               images={product.images}
@@ -107,9 +138,11 @@ function ProductDetails({ product }: ProductDetailsProps) {
             <div className="max-w-[300px]">
                 <Button 
                   label='Add to cart'
-                  onClick={() => {}}
+                  onClick={() => handleAddProductToCart(cartProduct)}
                  />
             </div>
+            </>
+             }
         </div>
 
     </div>

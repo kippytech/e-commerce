@@ -10,6 +10,7 @@ type ListRatingPropType = {
 }
 
 function ListRating({ product }: ListRatingPropType) {
+  console.log('bure kabisa')
   return (
     <div>
         <Heading title="Product Review" />

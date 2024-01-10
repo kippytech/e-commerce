@@ -43,7 +43,7 @@ function CartClient() {
             </div>
             <div className='text-sm flex flex-col gap-1 items-start'>
                 
-                    <div className='FLEX justify-between w-full font-semibold text-base'>
+                    <div className='flex justify-between w-full font-semibold text-base'>
                       <span className=''>Subtotal</span>
                       <span className=''>30000KES</span>
                     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Heading from "./Heading"
 import Input from "./inputs/Input"
 import { SubmitHandler, FieldValues, useForm } from "react-hook-form"
@@ -11,8 +11,13 @@ import {toast} from 'react-hot-toast'
 import axios from 'axios'
 import {signIn} from 'next-auth/react'
 import { useRouter } from "next/navigation"
+import { SafeUser } from "@/types"
 
-function RegisterForm() {
+type RegisterFormPropType = {
+  currentUser: SafeUser
+}
+
+function RegisterForm({ currentUser }: RegisterFormPropType) {
 
   const [isLoading, setIsLoading] = useState(false)
   const { register, handleSubmit, formState: errors} = useForm<FieldValues>({
@@ -24,6 +29,13 @@ function RegisterForm() {
   })
 
   const router = useRouter()
+
+  useEffect(() => {
+    if (currentUser) {
+        router.push('/cart')
+        router.refresh()
+    }
+  }, [])
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
@@ -48,6 +60,10 @@ function RegisterForm() {
       })
     }).catch(() => toast.error('Something went wrong')).finally(() => setIsLoading(false))
   } 
+
+  if (currentUser) {
+    return <p className="text-center">Logged in. Redirecting...</p>
+  }
 
   return (
     <>

@@ -68,7 +68,7 @@ function RegisterForm({ currentUser }: RegisterFormPropType) {
   return (
     <>
       <Heading title="Sign up for SokoMall" />
-      <Button outline label="Sign Up with Google" icon={AiOutlineGoogle} onClick={() => {}} />
+      <Button outline label="Continue with google with Google" icon={AiOutlineGoogle} onClick={() => {signIn('google')}} />
       <hr className="bg-slate-300 w-full h-px" />
       <Input id="name" label="name" disabled={isLoading} register={register} errors={errors} required/>
       <Input id="email" label="email" disabled={isLoading} register={register} errors={errors} required/>

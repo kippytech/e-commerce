@@ -62,7 +62,7 @@ function LoginForm({ currentUser } : LoginFormPropType) {
   return (
     <>
       <Heading title="Sign in to SokoMall" />
-      <Button outline label="Continue with Google" icon={AiOutlineGoogle} onClick={() => {}} />
+      <Button outline label="Continue with Google" icon={AiOutlineGoogle} onClick={() => {signIn('google')}} />
       <hr className="bg-slate-300 w-full h-px" />
       <Input id="email" label="email" disabled={isLoading} register={register} errors={errors} required/>
       <Input id="password" label="password" disabled={isLoading} register={register} errors={errors} required type="password"/>

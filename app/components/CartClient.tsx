@@ -8,9 +8,16 @@ import Heading from './Heading'
 import Button from './Button'
 import ItemContent from './ItemContent'
 import { formattedPrice } from '@/utils/formatPrice'
+import { SafeUser } from '@/types'
+import { useRouter } from 'next/navigation'
 
-function CartClient() {
+type CartClientProps = {
+  currentUser: SafeUser 
+}
+
+function CartClient({ currentUser }: CartClientProps) {
     const { cartProducts, handleClearCart, cartTotalAmount } = useCart()
+    const router = useRouter()
 
     if (!cartProducts || cartProducts.length === 0) {
         return (
@@ -50,7 +57,7 @@ function CartClient() {
                       <span className=''>{formattedPrice(cartTotalAmount)}</span>
                     </div>
                     <p className='text-slate-500'>Taxes and shipping calculated at checkout</p>
-                    <Button label='Checkout' onClick={() => {}} />
+                    <Button label={currentUser ? 'Checkout' : 'Login to checkout'} onClick={() => {currentUser ? router.push('/checkout') : router.push('/login') }} />
                     <Link href='/' className='text-slate-500 flex items-center gap-1 mt-2'>
                       <MdArrowBack />
                       <span>Continue Shopping</span>

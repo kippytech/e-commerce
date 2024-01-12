@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   description: 'E-Commerce Shop',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
 
-  const currentUser = getCurrentUser()
+  const currentUser = await getCurrentUser()
   console.log('user<<<: ', currentUser)
 
   return (

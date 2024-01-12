@@ -63,7 +63,7 @@ export default function CheckoutForm({ clientSecret, handlePaymentSuccess }: Che
             <div className="py-4 text-center text-slate-700 text-xl font-bold">
                 Total: {formatted_Price}
             </div>
-            <Button label={isLoading ? 'Processing...' : 'Pay now'} disabled={isLoading || !stripe || !elements} onClick={() => {}}
+            <Button label={isLoading ? 'Processing...' : 'Pay now'} disabled={isLoading || !stripe || !elements} onClick={() => {}} />
         </form>
     )
 }

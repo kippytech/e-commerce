@@ -11,6 +11,8 @@ import { useCallback } from "react"
 import axios from "axios"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { deleteObject, getStorage, ref } from "firebase/storage"
+import firebaseApp from "@/libs/firebase"
 
 type ManageProductsClientProps = {
     products: Product[]
@@ -19,6 +21,7 @@ type ManageProductsClientProps = {
 function ManageProductsClient({ products }: ManageProductsClientProps) {
 
     const router = useRouter()
+    const storage = getStorage(firebaseApp)
 
     let rows: any = []
 
@@ -50,7 +53,7 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
         {field: 'actions', headerName: 'Actions', width: 200, renderCell: (params) => {
             return <div className="flex justify-between gap-4 w-full">
                 <ActionBtn  icon={MdCached} onClick={() => {handleToggleStock(params.row.id, params.row.inStock)}} />
-                <ActionBtn  icon={MdDelete} onClick={() => {}} />
+                <ActionBtn  icon={MdDelete} onClick={() => {handleDelete(params.row.id, params.row.images)}} />
                 <ActionBtn  icon={MdRemoveRedEye} onClick={() => {}} />
             </div>
         }, }
@@ -67,6 +70,38 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
             console.log(err)
         })
     }, [])
+
+    const handleDelete = useCallback( async (id: string, images: any[]) => {
+        //will delete from both db & firebase (takes time)
+        toast('Deleting product, please wait...')
+
+        // will start with image then product deletion
+        const handleImageDelete = async () => {
+            try {
+                for (const item of images) {
+                    if (item.image) {
+                        const imageRef = ref(storage, item.image)
+                        await deleteObject(imageRef)
+                        console.log('image deleted', item.image)
+                    }
+                }
+            } catch (error) {
+                return console.log('Deleting error', error)
+            }
+        }
+
+        await handleImageDelete()
+
+        axios.delete(`/api/product/${id}`).then((res) => {
+            toast.success('Product deleted')
+            router.refresh()
+        }).catch((err) => {
+            toast.error('Something went wrong')
+            console.log(err)
+        })
+
+    }, [])
+
   return (
     <div className="max-w-[1150px] mx-auto text-xl">
         <div className="mt-8 mb-4">

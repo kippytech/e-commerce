@@ -48,7 +48,7 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
         {field: 'category', headerName: 'Category', width: 100},
         {field: 'brand', headerName: 'Brand', width: 100},
         {field: 'inStock', headerName: 'inStock', width: 120, renderCell: (params) => {
-        return <div>{params.row.inStock === true ? <Status  text='in stock' icon={MdDone} bg='bg-teal-200' color='text-teal-700' /> : <Status  text='out of stock' icon={MdClose} bg='bg-rose-200' color='textrose-700' /> }</div>
+        return <div>{params.row.inStock === true ? <Status  text='in stock' icon={MdDone} bg='bg-teal-200' color='text-teal-700' /> : <Status  text='out of stock' icon={MdClose} bg='bg-rose-200' color='text-rose-700' /> }</div>
         }, },
         {field: 'actions', headerName: 'Actions', width: 200, renderCell: (params) => {
             return <div className="flex justify-between gap-4 w-full">

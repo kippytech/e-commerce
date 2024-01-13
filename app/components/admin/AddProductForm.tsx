@@ -11,6 +11,11 @@ import CategoryInput from "../inputs/CategoryInput"
 import { colors } from "@/utils/colors"
 import SelectColor from "../inputs/SelectColor"
 import Button from "../Button"
+import toast from "react-hot-toast"
+import firebaseApp from "@/libs/firebase"
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { useRouter } from "next/navigation"
+import axios from "axios"
 
 export type ImageType = {
   color: string,
@@ -29,6 +34,8 @@ function AddProductForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<ImageType[] | null>(null)
   const [isProductCreated, setIsProductCreated] = useState(false)
+
+  const router = useRouter()
 
   const {register, handleSubmit, setValue, watch, reset, formState: {errors}} = useForm<FieldValues>({
     defaultValues: {
@@ -52,7 +59,87 @@ function AddProductForm() {
     }
   }, [isProductCreated])
 
-  const onSubmit: SubmitHandler<FieldValues> = async  (data) => {}
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    //upload images to firebase
+    setIsLoading(true)
+    let uploadedImages: UploadedImageType[] = []
+
+    if (!data.category) {
+      setIsLoading(false)
+      return toast.error('Category is not selected')
+    }
+
+    if (!data.images || data.images.length === 0) {
+      setIsLoading(false)
+      return toast.error('No selected image')
+    }
+
+    const handleImageUploads = async () => {
+      toast('Creating product. Please wait...')
+      try {
+        for (const item of data.images) {
+          if (item.image) {
+            const fileName = new Date().getTime() + '-' + item.name
+            const storage = getStorage(firebaseApp)
+            const storageRef = ref(storage, `products/${fileName}`)
+            const uploadTask = uploadBytesResumable(storageRef, item.image)
+
+            await new Promise<void> ((resolve, reject) => {
+              uploadTask.on('state_changed',
+              (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log(`upload is ` + progress + '% done')
+                switch (snapshot.state) {
+                  case 'paused':
+                    console.log('upload is paused')
+                    break
+                  case 'running':
+                    console.log('upload is running')
+                    break
+                }
+              },
+              (error) => {
+                console.log('Error uploading the image')
+                reject(error)
+              },
+              () => {
+                //handle successful uploads on complete
+                //for instance get the download URL
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                  uploadedImages.push({...item, image: downloadURL})
+                  console.log('file available at: ', downloadURL)
+                  resolve()
+                }).catch ((error) => {
+                  console.log('Error getting the download URL', error)
+                  reject(error)
+                }) 
+              })
+            })
+          }
+        } 
+      } catch (error) {
+          setIsLoading(false)
+          console.log('error handling image uploads', error)
+          return toast.error('error handling image uploads')
+      }
+    }
+    
+    await handleImageUploads()
+    const productData = {...data, images: uploadedImages}
+    console.log(productData)
+
+    //save product to db
+    axios.post('/api/product', productData).then(() => {
+      toast.success('Product created')
+      setIsProductCreated(true) //clears form state
+      router.refresh()
+    }).catch((error) => {
+      toast.error('Something went wrong')
+    }).finally(() => {
+      setIsLoading(false)
+    })
+
+  }
 
   const category = watch('category')
   const setCustomValue = (id: string, value: any) => {

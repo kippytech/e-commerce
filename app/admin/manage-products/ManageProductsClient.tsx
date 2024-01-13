@@ -7,12 +7,18 @@ import Heading from "@/app/components/Heading"
 import Status from "@/app/components/Status"
 import { MdCached, MdClose, MdDelete, MdDone, MdRemoveRedEye } from "react-icons/md"
 import ActionBtn from "@/app/components/ActionBtn"
+import { useCallback } from "react"
+import axios from "axios"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 type ManageProductsClientProps = {
     products: Product[]
 } 
 
 function ManageProductsClient({ products }: ManageProductsClientProps) {
+
+    const router = useRouter()
 
     let rows: any = []
 
@@ -43,12 +49,24 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
         }, },
         {field: 'actions', headerName: 'Actions', width: 200, renderCell: (params) => {
             return <div className="flex justify-between gap-4 w-full">
-                <ActionBtn  icon={MdCached} onClick={() => {}} />
+                <ActionBtn  icon={MdCached} onClick={() => {handleToggleStock(params.row.id, params.row.inStock)}} />
                 <ActionBtn  icon={MdDelete} onClick={() => {}} />
                 <ActionBtn  icon={MdRemoveRedEye} onClick={() => {}} />
             </div>
         }, }
     ]
+
+    const handleToggleStock = useCallback((id: string, inStock: boolean) => {
+        axios.put('/api/product', {
+            id, inStock: !inStock
+        }).then((res) => {
+            toast.success('Product status changed')
+            router.refresh()
+        }).catch((err) => {
+            toast.error('Something went wrong')
+            console.log(err)
+        })
+    }, [])
   return (
     <div className="max-w-[1150px] mx-auto text-xl">
         <div className="mt-8 mb-4">

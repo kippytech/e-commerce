@@ -5,6 +5,7 @@ import { Redressed } from 'next/font/google'
 import CartCount from './CartCount'
 import UserMenu from './UserMenu'
 import { getCurrentUser } from '@/actions/getCurrentUser'
+import Categories from './Categories'
 
 const redressed = Redressed({subsets: ['latin'], weight: ['400']})
 
@@ -25,6 +26,7 @@ async function Navbar() {
                 </div>
             </Container>
         </div>
+        <Categories />
     </div>
   )
 }

@@ -30,7 +30,9 @@ export async function POST(request: Request) {
 export async function PUT (request: Request) {
     const currentUser = await getCurrentUser()
 
-    if (!currentUser || currentUser.role !== 'ADMIN') {
+    if (!currentUser) return NextResponse.error()
+    
+    if (currentUser.role !== 'ADMIN') {
         return NextResponse.error()
     }
 

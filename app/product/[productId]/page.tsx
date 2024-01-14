@@ -1,3 +1,6 @@
+import { getCurrentUser } from "@/actions/getCurrentUser"
+import getProductById from "@/actions/getProductById"
+import AddRating from "@/app/components/AddRating"
 import Container from "@/app/components/Container"
 import ListRating from "@/app/components/ListRating"
 import ProductDetails from "@/app/components/ProductDetails"
@@ -8,14 +11,16 @@ type Params = {
     productId?: string
 }
 
-function Product({ params } : { params: Params }) {
-   const product = products.find((item) => item.id === params.productId)
+async function Product({ params } : { params: Params }) {
+   const product:any = products.find((item) => item.id === params.productId)
+   //const product = await getProductById(params)
+   const user = await getCurrentUser()
   return (
     <div className="p-8">
         <Container>
             <ProductDetails product={product} />
             <div className='flex flex-col gap-4 mt-20'>
-                <div>Add rating</div>
+                <AddRating product={product} user={user} />
                 <ListRating product={product} />
             </div>
         </Container>

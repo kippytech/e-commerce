@@ -20,7 +20,7 @@ type RegisterFormPropType = {
 function RegisterForm({ currentUser }: RegisterFormPropType) {
 
   const [isLoading, setIsLoading] = useState(false)
-  const { register, handleSubmit, formState: errors} = useForm<FieldValues>({
+  const { register, handleSubmit, formState: {errors}} = useForm<FieldValues>({
     defaultValues: {
       name: '',
       email: '',

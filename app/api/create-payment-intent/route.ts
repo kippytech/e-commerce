@@ -51,39 +51,39 @@ export async function POST(request: Request) {
 
              //update the order
               //update the order
-        const { existing_order, updated_order } = await Promise.all([
-            prisma.order.findFirst({
-                where: {paymentIntentId: payment_intent_id}
-            }),
-            prisma.order.update({
-                where: {paymentIntentId: payment_intent_id}, 
-                data: {
-                    amount: total,
-                    products: items
-                }
-            })
-        ])
+    //     const { existing_order, updated_order } = await Promise.all([
+    //         prisma.order.findFirst({
+    //             where: {paymentIntentId: payment_intent_id}
+    //         }),
+    //         prisma.order.update({
+    //             where: {paymentIntentId: payment_intent_id}, 
+    //             data: {
+    //                 amount: total,
+    //                 products: items
+    //             }
+    //         })
+    //     ])
 
-        if (!existing_order) {
-            return NextResponse.json({error: 'Invalid payment intent'}, {status: 400})
-        }
+    //     if (!existing_order) {
+    //         return NextResponse.json({error: 'Invalid payment intent'}, {status: 400})
+    //     }
 
-        return NextResponse.json({paymentIntent: updated_intent})         
-      }
-    } else {
-        //create the payment intent 
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: total,
-            currency: 'kes',
-            automatic_payment_methods: {enabled: true}
-        })
-        //create the order
-        orderData.paymentIntent = paymentIntent.id
+    //     return NextResponse.json({paymentIntent: updated_intent})         
+    //   }
+    // } else {
+    //     //create the payment intent 
+    //     const paymentIntent = await stripe.paymentIntents.create({
+    //         amount: total,
+    //         currency: 'kes',
+    //         automatic_payment_methods: {enabled: true}
+    //     })
+    //     //create the order
+    //     orderData.paymentIntent = paymentIntent.id
 
-        await prisma.order.create({
-            data: orderData
-        })
+        // await prisma.order.create({
+        //     data: orderData
+        // })
 
-        return NextResponse.json(paymentIntent)
+        // return NextResponse.json(paymentIntent)
     }
-}
+}}

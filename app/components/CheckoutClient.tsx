@@ -9,7 +9,9 @@ import { StripeElementsOptions, loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import Button from "./Button"
 
-const stripePromise = loadStripe((process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as stripe))
+const stripePromise = loadStripe('stripe')
+//const stripePromise = loadStripe(process.env.(NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as stripe/string?)))
+
 
 function CheckoutClient() {
     const { cartProducts, paymentIntent, handlePaymentIntent } = useCart()
@@ -77,7 +79,7 @@ function CheckoutClient() {
         <div className="flex items-center flex-col gap-4">
             <div className="text-teal-500 text-center">Payment Success</div>
             <div className="max-w-[220px] w-full">
-                <Button label="View your orders" onClick={() => router.push('/order')}
+                <Button label="View your orders" onClick={() => router.push('/order')} />
             </div>
         </div> }
     </div>

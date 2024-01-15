@@ -19,7 +19,7 @@ type LoginFormPropType = {
 function LoginForm({ currentUser } : LoginFormPropType) {
 
   const [isLoading, setIsLoading] = useState(false)
-  const { register, handleSubmit, formState: errors} = useForm<FieldValues>({
+  const { register, handleSubmit, formState: {errors}} = useForm<FieldValues>({
     defaultValues: {
       email: '',
       password: ''

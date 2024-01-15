@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+
 import Summary from '../components/Summary'
 import getOrders from '@/actions/getOrders'
 import getProducts from '@/actions/getProducts'

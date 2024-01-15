@@ -5,11 +5,36 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 //import { PrismaClient } from "@prisma/client"
 import prisma from "@/libs/prismadb"
 import bcrypt from 'bcrypt'
+import { Adapter, AdapterUser } from "next-auth/adapters"
 
 //const prisma = new PrismaClient()
 
+// Assuming your PrismaAdapter is using this type
+//const createUser = async (user: AdapterUser): Promise<AdapterUser> => {
+    // Your implementation here
+  //  return user
+  //};
+  
+  // Adjust the signature to match the expected format in next-auth/adapters
+  //const createUserForNextAuth = async (user: Omit<AdapterUser, 'id'>): Promise<Omit<AdapterUser, 'id'>> => {
+    // Your updated implementation here
+    //return user
+  //};
+
+  const createUser: Adapter['createUser'] = async (user) => {
+  // Your implementation here
+  // Make sure to return a value of type AdapterUser
+  return {
+    ...user,
+    id: 'generated-id', // Replace with your logic to generate an ID
+  };
+};
+
 export const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: {async createUser(user) {
+    //return createUserForNextAuth(user);
+    return createUser(user)
+  },}, //PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,

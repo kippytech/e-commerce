@@ -1,178 +1,199 @@
-import { CartProductType } from "@/app/components/ProductDetails"
-import { createContext, useCallback, useContext, useEffect, useState } from "react"
-import toast from "react-hot-toast"
+import { CartProductType } from "@/app/components/ProductDetails";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import toast from "react-hot-toast";
 
 type CartContextType = {
-    cartTotalQty: number
-    cartTotalAmount: number
-    cartProducts: CartProductType[] | null
-    handleAddProductToCart: (product: CartProductType) => void
-    handleRemoveProductFromCart: (product: CartProductType) => void
-    handleCartQtyIncrease: (product: CartProductType) => void
-    handleCartQtyDecrease: (product: CartProductType) => void
-    handleClearCart: () => void
-    paymentIntent: string | null
-    handlePaymentIntent: (value: string | null) => void
-}
+  cartTotalQty: number;
+  cartTotalAmount: number;
+  cartProducts: CartProductType[] | null;
+  handleAddProductToCart: (product: CartProductType) => void;
+  handleRemoveProductFromCart: (product: CartProductType) => void;
+  handleCartQtyIncrease: (product: CartProductType) => void;
+  handleCartQtyDecrease: (product: CartProductType) => void;
+  handleClearCart: () => void;
+  paymentIntent: string | null;
+  handlePaymentIntent: (value: string | null) => void;
+};
 
-export const CartContext = createContext<CartContextType | null>(null)
+export const CartContext = createContext<CartContextType | null>(null);
 
 //index signature
 type PropType = {
-    [propName: string]: any
-}
+  [propName: string]: any;
+};
 
 export const CartContextProvider = ({ props }: PropType) => {
-    const [cartTotalQty, setCartTotalQty] = useState(0)
-    const [cartTotalAmount, setCartTotalAmount] = useState(0)
-    const [cartProducts, setCartProducts] = useState<CartProductType[] | null>(null)
+  const [cartTotalQty, setCartTotalQty] = useState(0);
+  const [cartTotalAmount, setCartTotalAmount] = useState(0);
+  const [cartProducts, setCartProducts] = useState<CartProductType[] | null>(
+    null,
+  );
 
-    const [paymentIntent, setPaymentIntent] = useState<string | null>()
+  const [paymentIntent, setPaymentIntent] = useState<string | null>(null);
 
-    useEffect(() => {
-        const cartItems: any = localStorage.getItem('cartItems')
-        const cProducts: CartProductType[] | null = JSON.parse(cartItems)
-        //putting paymentIntent to localStorage
-        const paymentIntentLocal: any = localStorage.getItem('paymentIntentLocal')
-        const payment_Intent: string | null = JSON.parse(paymentIntentLocal)
+  useEffect(() => {
+    const cartItems: any = localStorage.getItem("cartItems");
+    const cProducts: CartProductType[] | null = JSON.parse(cartItems);
+    //putting paymentIntent to localStorage
+    const paymentIntentLocal: any = localStorage.getItem("paymentIntentLocal");
+    const payment_Intent: string | null = JSON.parse(paymentIntentLocal);
 
-        setCartProducts(cProducts)
-        setPaymentIntent(payment_Intent)
-    }, [])
+    setCartProducts(cProducts);
+    setPaymentIntent(payment_Intent);
+  }, []);
 
-    useEffect(() => {
-        const getTotals = () => {
+  useEffect(() => {
+    const getTotals = () => {
+      if (cartProducts) {
+        const { total, qty } = cartProducts?.reduce(
+          (acc, item) => {
+            const itemTotal = item.price * item.quantity;
 
-            if (cartProducts) {
-                const { total, qty } = cartProducts?.reduce((acc, item) => {
-                    const itemTotal = item.price * item.quantity
-    
-                    acc.total += itemTotal
-                    acc.qty += item.quantity
-    
-                    return acc
-                }, {
-                    total: 0,
-                    qty: 0
-                })
+            acc.total += itemTotal;
+            acc.qty += item.quantity;
 
-                setCartTotalQty(qty)
-                setCartTotalAmount(total)
-            }
+            return acc;
+          },
+          {
+            total: 0,
+            qty: 0,
+          },
+        );
 
+        setCartTotalQty(qty);
+        setCartTotalAmount(total);
+      }
+    };
+
+    getTotals();
+  }, [cartProducts]);
+
+  const handleAddProductToCart = useCallback((product: CartProductType) => {
+    setCartProducts((prev) => {
+      let updatedCart;
+
+      if (prev) {
+        updatedCart = [...prev, product];
+      } else {
+        updatedCart = [product];
+      }
+
+      toast.success("Product added to cart");
+      localStorage.setItem("CartItems", JSON.stringify(updatedCart));
+
+      return updatedCart;
+    });
+  }, []);
+
+  const handleRemoveProductFromCart = useCallback(
+    (product: CartProductType) => {
+      if (cartProducts) {
+        const filteredProducts = cartProducts.filter((item) => {
+          return item.id !== product.id;
+        });
+
+        setCartProducts(filteredProducts);
+
+        toast.success("Product removed from the cart");
+        localStorage.setItem("CartItems", JSON.stringify(filteredProducts));
+      }
+    },
+    [cartProducts],
+  );
+
+  const handleCartQtyIncrease = useCallback(
+    (product: CartProductType) => {
+      let updatedCart;
+
+      if (product.quantity === 99) {
+        return toast.error("Oops max reached");
+      }
+
+      if (cartProducts) {
+        updatedCart = [...cartProducts];
+
+        const existingIndex = cartProducts.findIndex(
+          (item) => item.id === product.id,
+        );
+
+        if (existingIndex > -1) {
+          updatedCart[existingIndex].quantity = ++updatedCart[existingIndex]
+            .quantity;
         }
 
-        getTotals()
-    }, [cartProducts])
+        setCartProducts(updatedCart);
+        localStorage.setItem("CartItems", JSON.stringify(updatedCart));
+      }
+    },
+    [cartProducts],
+  );
 
-    const handleAddProductToCart = useCallback((product: CartProductType) => {
-      setCartProducts((prev) => {
-         let updatedCart;
+  const handleCartQtyDecrease = useCallback(
+    (product: CartProductType) => {
+      let updatedCart;
 
-         if (prev) {
-            updatedCart = [...prev, product]
-         } else {
-            updatedCart = [product]
-         }
+      if (product.quantity === 1) {
+        return toast.error("Oops min reached");
+      }
 
-         toast.success('Product added to cart')
-         localStorage.setItem('CartItems', JSON.stringify(updatedCart))
+      if (cartProducts) {
+        updatedCart = [...cartProducts];
 
-         return updatedCart
-        })
-    }, [cartProducts])
+        const existingIndex = cartProducts.findIndex(
+          (item) => item.id === product.id,
+        );
 
-    const handleRemoveProductFromCart = useCallback((product: CartProductType) => {
-        if (cartProducts) {
-            const filteredProducts = cartProducts.filter((item) => {
-                return item.id !== product.id
-            })
-
-            setCartProducts(filteredProducts)
-
-            toast.success('Product removed from the cart')
-            localStorage.setItem('CartItems', JSON.stringify(filteredProducts))
-
-        }
-    }, [cartProducts])
-
-    const handleCartQtyIncrease = useCallback((product: CartProductType) => {
-        let updatedCart;
-
-        if (product.quantity === 99) {
-            return toast.error('Oops max reached')
+        if (existingIndex > -1) {
+          updatedCart[existingIndex].quantity = --updatedCart[existingIndex]
+            .quantity;
         }
 
-        if (cartProducts) {
-            updatedCart = [...cartProducts]
+        setCartProducts(updatedCart);
+        localStorage.setItem("CartItems", JSON.stringify(updatedCart));
+      }
+    },
+    [cartProducts],
+  );
 
-            const existingIndex = cartProducts.findIndex((item) => item.id === product.id)
+  const handleClearCart = useCallback(() => {
+    setCartProducts(null);
+    setCartTotalQty(0);
+    localStorage.removeItem("CartItems");
+  }, []);
 
-            if (existingIndex > 1) {
-                updatedCart[existingIndex].quantity = ++updatedCart[existingIndex].quantity
-            }
+  const handlePaymentIntent = useCallback((val: string | null) => {
+    setPaymentIntent(val);
+    localStorage.setItem("paymentIntentLocal", JSON.stringify(val));
+  }, []);
 
-            setCartProducts(updatedCart)
-            localStorage.setItem('CartItems', JSON.stringify(updatedCart))
-    
-        }
-    }, [cartProducts])
+  const value = {
+    cartTotalQty,
+    cartTotalAmount,
+    cartProducts,
+    handleAddProductToCart,
+    handleRemoveProductFromCart,
+    handleCartQtyIncrease,
+    handleCartQtyDecrease,
+    handleClearCart,
+    paymentIntent,
+    handlePaymentIntent,
+  };
 
-    const handleCartQtyDecrease = useCallback((product: CartProductType) => {
-        let updatedCart;
-
-        if (product.quantity === 1) {
-            return toast.error('Oops min reached')
-        }
-
-        if (cartProducts) {
-            updatedCart = [...cartProducts]
-
-            const existingIndex = cartProducts.findIndex((item) => item.id === product.id)
-
-            if (existingIndex > 1) {
-                updatedCart[existingIndex].quantity = --updatedCart[existingIndex].quantity
-            }
-
-            setCartProducts(updatedCart)
-            localStorage.setItem('CartItems', JSON.stringify(updatedCart))
-    
-        }
-    }, [cartProducts])
-
-    const handleClearCart = useCallback(() => {
-        setCartProducts(null)
-        setCartTotalQty(0)
-        localStorage.removeItem('CartItems')
-    }, [cartProducts])
-
-    const handlePaymentIntent = useCallback((val: string | null) => {
-        setPaymentIntent(val)
-        localStorage.setItem('paymentIntentLocal', JSON.stringify(val))
-    }, [paymentIntent])
-
-    const value = {
-        cartTotalQty,
-        cartTotalAmount,
-        cartProducts,
-        handleAddProductToCart,
-        handleRemoveProductFromCart,
-        handleCartQtyIncrease,
-        handleCartQtyDecrease,
-        handleClearCart,
-        paymentIntent,
-        handlePaymentIntent
-    }
-
-    return <CartContext.Provider value={value} {...props} />
-}
+  return <CartContext.Provider value={value} {...props} />;
+};
 
 export const useCart = () => {
-    const context = useContext(CartContext)
+  const context = useContext(CartContext);
 
-    if (context === null) {
-        throw new Error('useCart must be used within a CartContextProvider')
-    }
+  if (context === null) {
+    throw new Error("useCart must be used within a CartContextProvider");
+  }
 
-    return context
-}
+  return context;
+};

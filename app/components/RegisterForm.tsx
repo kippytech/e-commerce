@@ -77,7 +77,7 @@ function RegisterForm({ currentUser }: RegisterFormPropType) {
       <Heading title="Sign up for SokoMall" />
       <Button
         outline
-        label="Continue with google with Google"
+        label="Continue with Google"
         icon={AiOutlineGoogle}
         onClick={() => {
           signIn("google");
@@ -115,7 +115,7 @@ function RegisterForm({ currentUser }: RegisterFormPropType) {
       />
       <p className="text-sm">
         Already have an account?
-        <Link href="login" className="underline">
+        <Link href="/login" className="underline">
           Log in
         </Link>
       </p>

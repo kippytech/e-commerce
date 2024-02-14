@@ -97,7 +97,7 @@ function LoginForm({ currentUser }: LoginFormPropType) {
       />
       <p className="text-sm">
         Do not have an account?
-        <Link href="register" className="underline">
+        <Link href="/register" className="underline">
           Sign Up
         </Link>
       </p>

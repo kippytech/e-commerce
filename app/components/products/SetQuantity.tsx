@@ -20,14 +20,14 @@ function SetQuantity({
       {cartCounter ? null : <div className="font-semibold">QUANTITY</div>}
       <div className="flex items-center gap-4 text-base">
         <button
-          className="border-[1.2px rounded border-slate-300 px-2"
+          className="rounded border-[1.2px] border-slate-300 px-2"
           onClick={handleQtyDecrease}
         >
           -
         </button>
         <div>{cartProduct.quantity}</div>
         <button
-          className="border-[1.2px rounded border-slate-300 px-2"
+          className="rounded border-[1.2px] border-slate-300 px-2"
           onClick={handleQtyIncrease}
         >
           +

@@ -28,7 +28,7 @@ type PropType = {
   [propName: string]: any;
 };
 
-export const CartContextProvider = ({ props }: PropType) => {
+export const CartContextProvider = (props: PropType) => {
   const [cartTotalQty, setCartTotalQty] = useState(0);
   const [cartTotalAmount, setCartTotalAmount] = useState(0);
   const [cartProducts, setCartProducts] = useState<CartProductType[] | null>(

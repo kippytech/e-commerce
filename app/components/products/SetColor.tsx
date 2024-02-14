@@ -22,7 +22,7 @@ function SetColor({ images, cartProduct, handleColorSelect }: SetColorProps) {
             >
               <div
                 style={{ background: image.colorCode }}
-                className="h-5 w-5 rounded-full border-[1.2px] border-slate-300"
+                className="h-5 w-5 cursor-pointer rounded-full border-[1.2px] border-slate-300"
               ></div>
             </div>
           ))}

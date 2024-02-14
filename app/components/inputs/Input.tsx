@@ -1,25 +1,45 @@
-'uce client'
+"uce client";
 
-import { UseFormRegister, FieldValues, FieldErrors } from 'react-hook-form'
+import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
 
 type InputPropTypes = {
-    id: string
-    label: string
-    type?: string
-    required?: boolean
-    disabled?: boolean
-    register: UseFormRegister<FieldValues>
-    errors: FieldErrors
-}
+  id: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+  disabled?: boolean;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
+};
 
-function Input({ id, label, type, required, disabled, register, errors }: InputPropTypes) {
+function Input({
+  id,
+  label,
+  type,
+  required,
+  disabled,
+  register,
+  errors,
+}: InputPropTypes) {
   return (
-    <div className='w-full relative'>
-        <input className={`w-full p-4 pt-6 outline-none bg-white font-light border-2 rounded-md transition disabled:opacity-70 disabled:cursor-not-allowed ${errors[id] ? 'border-rose-400 ' : 'border-slate-300'} ${errors[id] ? 'focus:border-rose-400 ' : 'focus:border-slate-300'}`} autoComplete='off' id={id} disabled={disabled} {...register(id, {required})} type={type} placeholder='' 
-        />
-        <label htmlFor="id" className={`absolute cursor-text text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${errors[id] ? 'text-rose-400' : 'text-slate-400'}`}>{label}</label>
+    <div className="relative w-full">
+      <input
+        className={`peer w-full rounded-md border-2 bg-white p-4 pt-6 font-light outline-none transition disabled:cursor-not-allowed disabled:opacity-70 ${errors[id] ? "border-rose-400 " : "border-slate-300"} ${errors[id] ? "focus:border-rose-400 " : "focus:border-slate-300"}`}
+        autoComplete="off"
+        id={id}
+        disabled={disabled}
+        {...register(id, { required })}
+        type={type}
+        placeholder=""
+      />
+      <label
+        htmlFor="id"
+        className={`text-md absolute left-4 top-5 z-10 origin-[0] -translate-y-3 transform cursor-text duration-150 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 ${errors[id] ? "text-rose-400" : "text-slate-400"}`}
+      >
+        {label}
+      </label>
     </div>
-  )
+  );
 }
 
-export default Input
+export default Input;

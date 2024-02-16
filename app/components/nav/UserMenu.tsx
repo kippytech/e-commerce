@@ -10,7 +10,7 @@ import BackDrop from "./BackDrop";
 import { SafeUser } from "@/types";
 
 type UserMenuPropType = {
-  currentUser: SafeUser;
+  currentUser: SafeUser | null;
 };
 
 function UserMenu({ currentUser }: UserMenuPropType) {

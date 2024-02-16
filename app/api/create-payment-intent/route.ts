@@ -54,43 +54,42 @@ export async function POST(request: Request) {
 
       //update the order
       //update the order
-      //     const { existing_order, updated_order,  } = await Promise.all([
-      //         prisma.order.findFirst({
-      //             where: {paymentIntentId: payment_intent_id}
-      //         }),
-      //         prisma.order.update({
-      //             where: {paymentIntentId: payment_intent_id},
-      //             data: {
-      //                 amount: total,
-      //                 products: items
-      //             }
-      //         })
-      //     ])
+      const [existing_order, updated_order] = await Promise.all([
+        prisma.order.findFirst({
+          where: { paymentIntentId: payment_intent_id },
+        }),
+        prisma.order.update({
+          where: { paymentIntentId: payment_intent_id },
+          data: {
+            amount: total,
+            products: items,
+          },
+        }),
+      ]);
 
-      //     if (!existing_order) {
-      //         return NextResponse.error()
-      //     }
+      if (!existing_order) {
+        return NextResponse.error();
+      }
 
-      //     return NextResponse.json({paymentIntent: updated_intent})
-      //   }
-      // } else {
-      //     //create the payment intent
-      //     const paymentIntent = await stripe.paymentIntents.create({
-      //         amount: total,
-      //         currency: 'usd',
-      //         automatic_payment_methods: {enabled: true}
-      //     })
-      //     //create the order
-      //     orderData.paymentIntentId = paymentIntent.id
-
-      //     await prisma.order.create({
-      //         data: orderData
-      //     })
-
-      //     return NextResponse.json(paymentIntent)
-
-      //     //return a default response if none of the conditions met
-      //     return NextResponse.error()
+      return NextResponse.json({ paymentIntent: updated_intent });
     }
+  } else {
+    //create the payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: total,
+      currency: "usd",
+      automatic_payment_methods: { enabled: true },
+    });
+    //create the order
+    orderData.paymentIntentId = paymentIntent.id;
+
+    await prisma.order.create({
+      data: orderData,
+    });
+
+    return NextResponse.json(paymentIntent);
   }
+
+  //return a default response if none of the conditions met
+  return NextResponse.error();
 }

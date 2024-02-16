@@ -1,4 +1,4 @@
-import prsima from '@/libs/prismadb'
+import prisma from '@/libs/prismadb'
 import moment from 'moment'
 
 export default async function getGraph() {
@@ -26,6 +26,8 @@ export default async function getGraph() {
         const aggregatedData: {
             [day: string]: { day: string; date: string; totalAmount: number}
         } = {}
+
+        //we know the date but we also want to know the day so:
 
         //create a clone of the start date to iterate over each day
         const currentDate = startDate.clone()

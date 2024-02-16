@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { SafeUser } from "@/types";
 
 type LoginFormPropType = {
-  currentUser: SafeUser;
+  currentUser: SafeUser | null;
 };
 
 function LoginForm({ currentUser }: LoginFormPropType) {
@@ -96,7 +96,7 @@ function LoginForm({ currentUser }: LoginFormPropType) {
         onClick={handleSubmit(onSubmit)}
       />
       <p className="text-sm">
-        Do not have an account?
+        Do not have an account?{" "}
         <Link href="/register" className="underline">
           Sign Up
         </Link>

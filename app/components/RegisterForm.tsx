@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { SafeUser } from "@/types";
 
 type RegisterFormPropType = {
-  currentUser: SafeUser;
+  currentUser: SafeUser | null;
 };
 
 function RegisterForm({ currentUser }: RegisterFormPropType) {
@@ -114,7 +114,7 @@ function RegisterForm({ currentUser }: RegisterFormPropType) {
         onClick={handleSubmit(onSubmit)}
       />
       <p className="text-sm">
-        Already have an account?
+        Already have an account?{" "}
         <Link href="/login" className="underline">
           Log in
         </Link>

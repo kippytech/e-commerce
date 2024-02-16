@@ -91,7 +91,7 @@ function CheckoutClient() {
           <div className="w-full max-w-[220px]">
             <Button
               label="View your orders"
-              onClick={() => router.push("/order")}
+              onClick={() => router.push("/orders")}
             />
           </div>
         </div>

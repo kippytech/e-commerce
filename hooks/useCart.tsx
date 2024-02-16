@@ -123,8 +123,8 @@ export const CartContextProvider = (props: PropType) => {
         );
 
         if (existingIndex > -1) {
-          updatedCart[existingIndex].quantity = ++updatedCart[existingIndex]
-            .quantity;
+          updatedCart[existingIndex].quantity =
+            updatedCart[existingIndex].quantity + 1;
         }
 
         setCartProducts(updatedCart);

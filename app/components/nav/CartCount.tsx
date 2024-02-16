@@ -12,7 +12,7 @@ function CartCount() {
         <div className='text-3xl'>
             <CiShoppingCart />
         </div>
-        <span className='absolute top-[-10px] right-[-10px] bg-slate-700 h-6 w-6 rounded-full flex items-center justify-center text-sm'>{cartTotalQty}</span>
+        <span className='absolute text-white top-[-10px] right-[-10px] bg-slate-700 h-6 w-6 rounded-full flex items-center justify-center text-sm'>{cartTotalQty}</span>
     </div>
   )
 }

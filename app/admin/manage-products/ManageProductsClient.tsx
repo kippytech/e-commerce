@@ -50,7 +50,7 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
     {
       field: "price",
       headerName: "Price",
-      width: 220,
+      width: 100,
       renderCell: (params) => {
         return (
           <div className="font-bold text-slate-800">{params.row.price}</div>
@@ -107,7 +107,7 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
             <ActionBtn
               icon={MdRemoveRedEye}
               onClick={() => {
-                router.push(`product/${params.row.id}`);
+                router.push(`/product/${params.row.id}`);
               }}
             />
           </div>
@@ -116,54 +116,60 @@ function ManageProductsClient({ products }: ManageProductsClientProps) {
     },
   ];
 
-  const handleToggleStock = useCallback((id: string, inStock: boolean) => {
-    axios
-      .put("/api/product", {
-        id,
-        inStock: !inStock,
-      })
-      .then((res) => {
-        toast.success("Product status changed");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Something went wrong");
-        console.log(err);
-      });
-  }, []);
+  const handleToggleStock = useCallback(
+    (id: string, inStock: boolean) => {
+      axios
+        .put("/api/product", {
+          id,
+          inStock: !inStock,
+        })
+        .then((res) => {
+          toast.success("Product status changed");
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error("Something went wrong");
+          console.log(err);
+        });
+    },
+    [router],
+  );
 
-  const handleDelete = useCallback(async (id: string, images: any[]) => {
-    //will delete from both db & firebase (takes time)
-    toast("Deleting product, please wait...");
+  const handleDelete = useCallback(
+    async (id: string, images: any[]) => {
+      //will delete from both db & firebase (takes time)
+      toast("Deleting product, please wait...");
 
-    // will start with image then product deletion
-    const handleImageDelete = async () => {
-      try {
-        for (const item of images) {
-          if (item.image) {
-            const imageRef = ref(storage, item.image);
-            await deleteObject(imageRef);
-            console.log("image deleted", item.image);
+      // will start with image then product deletion
+      const handleImageDelete = async () => {
+        try {
+          for (const item of images) {
+            if (item.image) {
+              const imageRef = ref(storage, item.image);
+              await deleteObject(imageRef);
+              console.log("image deleted", item.image);
+            }
           }
+        } catch (error) {
+          return console.log("Deleting error", error);
         }
-      } catch (error) {
-        return console.log("Deleting error", error);
-      }
-    };
+      };
 
-    await handleImageDelete();
+      await handleImageDelete();
 
-    axios
-      .delete(`/api/product/${id}`)
-      .then((res) => {
-        toast.success("Product deleted");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Something went wrong");
-        console.log(err);
-      });
-  }, []);
+      axios
+        .delete(`/api/product/${id}`)
+        .then((res) => {
+          toast.success("Product deleted");
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error("Something went wrong");
+          console.log(err);
+        });
+    },
+    [router, storage],
+  );
 
   return (
     <div className="mx-auto max-w-[1150px] text-xl">

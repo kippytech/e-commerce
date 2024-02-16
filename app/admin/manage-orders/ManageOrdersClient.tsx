@@ -53,7 +53,7 @@ function ManageOrdersClient({ orders }: ManageOrdersClientProps) {
       width: 130,
       renderCell: (params) => {
         return (
-          <div className="font-bold text-slate-800">{params.row.price}</div>
+          <div className="font-bold text-slate-800">{params.row.amount}</div>
         );
       },
     },
@@ -76,8 +76,8 @@ function ManageOrdersClient({ orders }: ManageOrdersClientProps) {
               <Status
                 text="completed"
                 icon={MdDone}
-                bg="bg-teal-200"
-                color="text-teal-700"
+                bg="bg-green-200"
+                color="text-green-700"
               />
             ) : (
               <></>
@@ -111,15 +111,8 @@ function ManageOrdersClient({ orders }: ManageOrdersClientProps) {
               <Status
                 text="delivered"
                 icon={MdAccessTimeFilled}
-                bg="bg-teal-200"
-                color="text-teal-700"
-              />
-            ) : params.row.deliveryStatus === "dispatched" ? (
-              <Status
-                text="dispatched"
-                icon={MdDone}
-                bg="bg-purple-200"
-                color="text-purple-700"
+                bg="bg-green-200"
+                color="text-green-700"
               />
             ) : (
               <></>
@@ -151,7 +144,7 @@ function ManageOrdersClient({ orders }: ManageOrdersClientProps) {
             <ActionBtn
               icon={MdRemoveRedEye}
               onClick={() => {
-                router.push(`order/${params.row.id}`);
+                router.push(`/order/${params.row.id}`);
               }}
             />
           </div>
@@ -160,37 +153,43 @@ function ManageOrdersClient({ orders }: ManageOrdersClientProps) {
     },
   ];
 
-  const handleDispatch = useCallback((id: string) => {
-    axios
-      .put("/api/order", {
-        id,
-        deliveryStatus: "dispatched",
-      })
-      .then((res) => {
-        toast.success("Order dispatched");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Something went wrong");
-        console.log(err);
-      });
-  }, []);
+  const handleDispatch = useCallback(
+    (id: string) => {
+      axios
+        .put("/api/order", {
+          id,
+          deliveryStatus: "dispatched",
+        })
+        .then((res) => {
+          toast.success("Order dispatched");
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error("Something went wrong");
+          console.log(err);
+        });
+    },
+    [router],
+  );
 
-  const handleDeliver = useCallback((id: string) => {
-    axios
-      .put("/api/order", {
-        id,
-        deliveryStatus: "delivered",
-      })
-      .then((res) => {
-        toast.success("Order delivered");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Something went wrong");
-        console.log(err);
-      });
-  }, []);
+  const handleDeliver = useCallback(
+    (id: string) => {
+      axios
+        .put("/api/order", {
+          id,
+          deliveryStatus: "delivered",
+        })
+        .then((res) => {
+          toast.success("Order delivered");
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error("Something went wrong");
+          console.log(err);
+        });
+    },
+    [router],
+  );
 
   return (
     <div className="mx-auto max-w-[1150px] text-xl">

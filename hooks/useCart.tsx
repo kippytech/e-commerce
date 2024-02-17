@@ -85,7 +85,7 @@ export const CartContextProvider = (props: PropType) => {
       }
 
       toast.success("Product added to cart");
-      localStorage.setItem("CartItems", JSON.stringify(updatedCart));
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
 
       return updatedCart;
     });
@@ -101,7 +101,7 @@ export const CartContextProvider = (props: PropType) => {
         setCartProducts(filteredProducts);
 
         toast.success("Product removed from the cart");
-        localStorage.setItem("CartItems", JSON.stringify(filteredProducts));
+        localStorage.setItem("cartItems", JSON.stringify(filteredProducts));
       }
     },
     [cartProducts],
@@ -128,7 +128,7 @@ export const CartContextProvider = (props: PropType) => {
         }
 
         setCartProducts(updatedCart);
-        localStorage.setItem("CartItems", JSON.stringify(updatedCart));
+        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
       }
     },
     [cartProducts],
@@ -155,7 +155,7 @@ export const CartContextProvider = (props: PropType) => {
         }
 
         setCartProducts(updatedCart);
-        localStorage.setItem("CartItems", JSON.stringify(updatedCart));
+        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
       }
     },
     [cartProducts],
@@ -164,7 +164,7 @@ export const CartContextProvider = (props: PropType) => {
   const handleClearCart = useCallback(() => {
     setCartProducts(null);
     setCartTotalQty(0);
-    localStorage.removeItem("CartItems");
+    localStorage.removeItem("cartItems");
   }, []);
 
   const handlePaymentIntent = useCallback((val: string | null) => {

@@ -92,7 +92,7 @@ type CartProductType {
 
 type Image {
   color String
-  colorcode String
+  colorCode String
   image String
 }
 

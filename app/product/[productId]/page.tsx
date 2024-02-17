@@ -13,10 +13,13 @@ type Params = {
 };
 
 async function Product({ params }: { params: Params }) {
-  const product: any = products.find((item) => item.id === params.productId);
-  //const product = await getProductById(params)
-  //if (!product) return  <NullData title='Oops! Product with the given id does not exist' />
+  //const product: any = products.find((item) => item.id === params.productId);
+  const product = await getProductById(params);
+  if (!product)
+    return <NullData title="Oops! Product with the given id does not exist" />;
+
   const user = await getCurrentUser();
+
   return (
     <div className="p-8">
       <Container>

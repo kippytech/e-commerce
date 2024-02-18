@@ -102,7 +102,7 @@ type Address {
   line1 String
   line2 String?
   postal_code String
-  county String
+  state String
 }
 
 enum Role {

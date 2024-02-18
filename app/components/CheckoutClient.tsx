@@ -24,6 +24,9 @@ function CheckoutClient() {
 
   const router = useRouter();
 
+  console.log("paymentIntent", paymentIntent);
+  console.log("clientSecret", clientSecret);
+
   useEffect(() => {
     //create payment intent as soona sthe page loads
     if (cartProducts) {
@@ -51,6 +54,8 @@ function CheckoutClient() {
         .then((data) => {
           setClientSecret(data.paymentIntent.client_secret);
           handlePaymentIntent(data.paymentIntent.id);
+
+          console.log("data>>>", data);
         })
         .catch((error) => {
           setIsError(true);

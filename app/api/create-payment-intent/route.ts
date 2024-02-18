@@ -87,7 +87,7 @@ export async function POST(request: Request) {
       data: orderData,
     });
 
-    return NextResponse.json(paymentIntent);
+    return NextResponse.json({ paymentIntent });
   }
 
   //return a default response if none of the conditions met

@@ -97,7 +97,7 @@ type Image {
 }
 
 type Address {
-  town String
+  city String
   country String
   line1 String
   line2 String?

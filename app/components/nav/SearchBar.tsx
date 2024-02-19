@@ -38,7 +38,7 @@ function SearchBar() {
   return (
     <div className="flex items-center">
       <input
-        className="max-w-80 flex-grow rounded-l-md border border-gray-300 p-2 focus:border-[0.5px] focus:border-slate-500 focus:outline-none"
+        className="md-w-80 w-40 flex-grow rounded-l-md border border-gray-300 p-2 focus:border-[0.5px] focus:border-slate-500 focus:outline-none"
         type="text"
         placeholder="Explore SokoMall"
         autoComplete="off"

@@ -16,7 +16,7 @@ async function Navbar() {
     <div className="sticky top-0 z-30 w-full bg-slate-200 shadow-md">
       <div className="border-b-[1px] py-4">
         <Container>
-          <div className="">
+          <div className="space-y-1">
             <div className="flex items-center justify-between gap-3 md:gap-0">
               <Link
                 className={`${redressed.className} text-2xl font-bold`}

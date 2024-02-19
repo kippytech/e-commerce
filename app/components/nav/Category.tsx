@@ -16,7 +16,7 @@ function Category({ label, icon: Icon, selected }: CategoryProps) {
   const params = useSearchParams();
 
   const handleClick = useCallback(() => {
-    if ((label = "All")) {
+    if (label === "All") {
       router.push("/");
     } else {
       let currentQuery = {};

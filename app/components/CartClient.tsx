@@ -53,7 +53,7 @@ function CartClient({ currentUser }: CartClientProps) {
           <Button
             label="Clear Cart"
             onClick={() => {
-              handleClearCart;
+              handleClearCart();
             }}
             small
             outline

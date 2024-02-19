@@ -141,7 +141,7 @@ function OrdersClient({ orders }: OrdersClientProps) {
   return (
     <div className="mx-auto max-w-[1150px] text-xl">
       <div className="mb-4 mt-8">
-        <Heading title="Manage Orders" center />
+        <Heading title="My Orders" center />
       </div>
       <div style={{ height: 600, width: "100%" }}>
         <DataGrid

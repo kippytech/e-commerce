@@ -64,7 +64,7 @@ function LoginForm({ currentUser }: LoginFormPropType) {
 
   return (
     <>
-      <Heading title="Sign in to SokoMall" />
+      <Heading title="Sign in to E-Shop" />
       <Button
         outline
         label="Continue with Google"

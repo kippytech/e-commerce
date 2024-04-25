@@ -22,7 +22,7 @@ async function Navbar() {
                 className={`${redressed.className} text-2xl font-bold`}
                 href="/"
               >
-                SokoMall
+                E-Shop
               </Link>
               <div className="hidden md:block">
                 <SearchBar />

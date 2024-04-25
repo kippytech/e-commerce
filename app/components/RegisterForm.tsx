@@ -74,7 +74,7 @@ function RegisterForm({ currentUser }: RegisterFormPropType) {
 
   return (
     <>
-      <Heading title="Sign up for SokoMall" />
+      <Heading title="Sign up for E-Shop" />
       <Button
         outline
         label="Continue with Google"
